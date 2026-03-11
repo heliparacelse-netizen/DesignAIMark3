@@ -1,0 +1,24 @@
+import type { Metadata } from 'next'
+import './globals.css'
+import { Providers } from '@/components/Providers'
+
+export const metadata: Metadata = {
+  title: 'DesignAI — AI Interior Design Studio',
+  description: 'Transform any room with AI-powered interior design. Generate stunning spaces in seconds.',
+}
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode
+}) {
+  return (
+    <html lang="en">
+      <body>
+        <Providers>
+          {children}
+        </Providers>
+      </body>
+    </html>
+  )
+}
