@@ -1,3 +1,4 @@
+cat > next.config.js << 'EOF'
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   typescript: { ignoreBuildErrors: true },
@@ -5,3 +6,4 @@ const nextConfig = {
   images: { unoptimized: true },
 }
 module.exports = nextConfig
+EOF
