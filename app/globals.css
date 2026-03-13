@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* { box-sizing: border-box; padding: 0; margin: 0; }
+html, body { background-color: #0a0a0f; color: #f5f5f0; font-family: Inter, system-ui, sans-serif; scroll-behavior: smooth; }
+.gold-gradient { background: linear-gradient(135deg, #c9a84c, #f0c96e, #c9a84c); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+.glass-card { background: rgba(22,22,31,0.8); backdrop-filter: blur(12px); border: 1px solid #2a2a3a; }
+.glow-gold:hover { box-shadow: 0 0 25px #c9a84c30; border-color: #c9a84c50 !important; transition: all 0.3s ease; }
+.btn-gold { background: linear-gradient(135deg, #c9a84c, #f0c96e); color: #0a0a0f; font-weight: 600; padding: 0.75rem 1.75rem; border-radius: 9999px; transition: all 0.2s ease; border: none; cursor: pointer; }
+.btn-gold:hover { transform: translateY(-1px); box-shadow: 0 8px 25px #c9a84c40; }
+.btn-outline { background: transparent; color: #f5f5f0; font-weight: 500; padding: 0.75rem 1.75rem; border-radius: 9999px; border: 1px solid #2a2a3a; transition: all 0.2s ease; cursor: pointer; }
+.btn-outline:hover { border-color: #c9a84c50; color: #c9a84c; }
+.grid-bg { background-image: linear-gradient(rgba(42,42,58,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(42,42,58,0.3) 1px, transparent 1px); background-size: 50px 50px; }
+@keyframes spin { to { transform: rotate(360deg); } }
