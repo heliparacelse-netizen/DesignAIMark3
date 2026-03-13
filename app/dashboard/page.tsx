@@ -13,31 +13,29 @@ export default function DashboardPage() {
 
   const freeUsed = (session?.user as any)?.freeGenerationsUsed || 0
   const freeLimit = 3
+  const nav = [
+    { icon: LayoutDashboard, label: 'Dashboard', href: '/dashboard', active: true },
+    { icon: FolderOpen, label: 'Projects', href: '/dashboard/projects' },
+    { icon: History, label: 'History', href: '/dashboard/history' },
+    { icon: Wand2, label: 'Studio', href: '/studio' },
+    { icon: Settings, label: 'Settings', href: '/dashboard/settings' },
+  ]
 
   return (
     <div style={{ minHeight: '100vh', background: '#0a0a0f', display: 'flex' }}>
-      <aside style={{ width: 240, background: '#111118', borderRight: '1px solid #2a2a3a', display: 'flex', flexDirection: 'column', position: 'fixed', top: 0, bottom: 0, left: 0 }}>
+      <aside style={{ width: 240, background: '#111118', borderRight: '1px solid #2a2a3a', display: 'flex', flexDirection: 'column', position: 'fixed', top: 0, bottom: 0, left: 0, zIndex: 10 }}>
         <div style={{ padding: '1.5rem', borderBottom: '1px solid #2a2a3a', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
           <div style={{ width: 32, height: 32, borderRadius: 8, background: 'linear-gradient(135deg, #c9a84c, #f0c96e)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Sparkles size={16} color="#0a0a0f" /></div>
           <span style={{ fontWeight: 700, color: '#f5f5f0' }}>DesignAI</span>
         </div>
         <nav style={{ padding: '1rem', flex: 1 }}>
-          {[
-            { icon: LayoutDashboard, label: 'Dashboard', href: '/dashboard', active: true },
-            { icon: FolderOpen, label: 'Projects', href: '/dashboard/projects' },
-            { icon: History, label: 'History', href: '/dashboard/history' },
-            { icon: Wand2, label: 'Studio', href: '/studio' },
-            { icon: Settings, label: 'Settings', href: '/dashboard/settings' },
-          ].map(item => {
-            const Icon = item.icon
-            return (
-              <Link key={item.label} href={item.href} style={{ textDecoration: 'none' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.65rem 0.75rem', borderRadius: 10, marginBottom: '0.25rem', background: (item as any).active ? 'rgba(201,168,76,0.1)' : 'transparent', color: (item as any).active ? '#c9a84c' : '#9999aa', fontSize: '0.9rem', fontWeight: (item as any).active ? 600 : 400 }}>
-                  <Icon size={18} />{item.label}
-                </div>
-              </Link>
-            )
-          })}
+          {nav.map(item => { const Icon = item.icon; return (
+            <Link key={item.label} href={item.href} style={{ textDecoration: 'none' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.65rem 0.75rem', borderRadius: 10, marginBottom: '0.25rem', background: (item as any).active ? 'rgba(201,168,76,0.1)' : 'transparent', color: (item as any).active ? '#c9a84c' : '#9999aa', fontSize: '0.9rem', fontWeight: (item as any).active ? 600 : 400 }}>
+                <Icon size={18} />{item.label}
+              </div>
+            </Link>
+          )})}
         </nav>
         <div style={{ padding: '1rem', borderTop: '1px solid #2a2a3a' }}>
           <button onClick={() => signOut({ callbackUrl: '/' })} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.65rem 0.75rem', width: '100%', background: 'transparent', border: 'none', cursor: 'pointer', color: '#9999aa', fontSize: '0.9rem', borderRadius: 10 }}>
@@ -48,7 +46,6 @@ export default function DashboardPage() {
       <main style={{ marginLeft: 240, flex: 1, padding: '2rem' }}>
         <h1 style={{ fontSize: '1.75rem', fontWeight: 800, color: '#f5f5f0', marginBottom: '0.25rem' }}>Welcome back, {session?.user?.name || 'Designer'} 👋</h1>
         <p style={{ color: '#9999aa', marginBottom: '2rem' }}>Here's your design workspace.</p>
-
         <div style={{ background: 'rgba(201,168,76,0.08)', border: '1px solid rgba(201,168,76,0.2)', borderRadius: 16, padding: '1.25rem 1.5rem', marginBottom: '2rem', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
           <div>
             <div style={{ fontWeight: 600, color: '#c9a84c', marginBottom: '0.5rem' }}>✦ {freeLimit - freeUsed} free generations remaining</div>
@@ -59,27 +56,22 @@ export default function DashboardPage() {
           </div>
           <Link href="/studio"><button className="btn-gold" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>Generate now <ArrowRight size={16} /></button></Link>
         </div>
-
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1rem', marginBottom: '2rem' }}>
           {[
             { label: 'Projects Created', value: freeUsed, icon: Image, color: '#c9a84c' },
             { label: 'AI Generations', value: freeUsed, icon: Zap, color: '#6c47ff' },
             { label: 'Styles Used', value: 3, icon: Star, color: '#c9a84c' },
             { label: 'Exports', value: 0, icon: Download, color: '#6c47ff' },
-          ].map(stat => {
-            const Icon = stat.icon
-            return (
-              <div key={stat.label} className="glass-card" style={{ padding: '1.5rem', borderRadius: 16 }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
-                  <span style={{ color: '#9999aa', fontSize: '0.85rem' }}>{stat.label}</span>
-                  <Icon size={18} color={stat.color} />
-                </div>
-                <div style={{ fontSize: '2rem', fontWeight: 800, color: '#f5f5f0' }}>{stat.value}</div>
+          ].map(stat => { const Icon = stat.icon; return (
+            <div key={stat.label} className="glass-card" style={{ padding: '1.5rem', borderRadius: 16 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '1rem' }}>
+                <span style={{ color: '#9999aa', fontSize: '0.85rem' }}>{stat.label}</span>
+                <Icon size={18} color={stat.color} />
               </div>
-            )
-          })}
+              <div style={{ fontSize: '2rem', fontWeight: 800, color: '#f5f5f0' }}>{stat.value}</div>
+            </div>
+          )})}
         </div>
-
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
           <div className="glass-card" style={{ padding: '1.5rem', borderRadius: 16 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
@@ -100,22 +92,19 @@ export default function DashboardPage() {
                 { label: 'View projects', href: '/dashboard/projects', icon: FolderOpen, color: '#6c47ff' },
                 { label: 'Generation history', href: '/dashboard/history', icon: History, color: '#c9a84c' },
                 { label: 'Account settings', href: '/dashboard/settings', icon: Settings, color: '#6c47ff' },
-              ].map(action => {
-                const Icon = action.icon
-                return (
-                  <Link key={action.label} href={action.href} style={{ textDecoration: 'none' }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.75rem', borderRadius: 10, background: '#0a0a0f', cursor: 'pointer', transition: 'background 0.2s' }}
-                      onMouseEnter={e => (e.currentTarget.style.background = '#2a2a3a')}
-                      onMouseLeave={e => (e.currentTarget.style.background = '#0a0a0f')}>
-                      <div style={{ width: 32, height: 32, borderRadius: 8, background: `${action.color}15`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        <Icon size={16} color={action.color} />
-                      </div>
-                      <span style={{ color: '#f5f5f0', fontSize: '0.9rem' }}>{action.label}</span>
-                      <ArrowRight size={14} color="#9999aa" style={{ marginLeft: 'auto' }} />
+              ].map(action => { const Icon = action.icon; return (
+                <Link key={action.label} href={action.href} style={{ textDecoration: 'none' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.75rem', borderRadius: 10, background: '#0a0a0f', cursor: 'pointer', transition: 'background 0.2s' }}
+                    onMouseEnter={e => (e.currentTarget.style.background = '#2a2a3a')}
+                    onMouseLeave={e => (e.currentTarget.style.background = '#0a0a0f')}>
+                    <div style={{ width: 32, height: 32, borderRadius: 8, background: `${action.color}15`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <Icon size={16} color={action.color} />
                     </div>
-                  </Link>
-                )
-              })}
+                    <span style={{ color: '#f5f5f0', fontSize: '0.9rem' }}>{action.label}</span>
+                    <ArrowRight size={14} color="#9999aa" style={{ marginLeft: 'auto' }} />
+                  </div>
+                </Link>
+              )})}
             </div>
           </div>
         </div>

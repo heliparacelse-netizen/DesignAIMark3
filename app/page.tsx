@@ -2,6 +2,7 @@ import Navbar from '@/components/Navbar'
 import HeroSection from '@/components/sections/HeroSection'
 import FeaturesSection from '@/components/sections/FeaturesSection'
 import HowItWorksSection from '@/components/sections/HowItWorksSection'
+import ComparisonSection from '@/components/sections/ComparisonSection'
 import PricingSection from '@/components/sections/PricingSection'
 import TestimonialsSection from '@/components/sections/TestimonialsSection'
 import { CTASection, Footer } from '@/components/sections/CTAFooter'
@@ -13,6 +14,7 @@ export default function HomePage() {
       <HeroSection />
       <FeaturesSection />
       <HowItWorksSection />
+      <ComparisonSection />
       <PricingSection />
       <TestimonialsSection />
       <CTASection />
