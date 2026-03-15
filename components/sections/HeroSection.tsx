@@ -1,6 +1,6 @@
 'use client'
 import Link from 'next/link'
-import { ArrowRight, Play, Zap, Layers, Box } from 'lucide-react'
+import { ArrowRight, Zap, Layers, Box } from 'lucide-react'
 
 export default function HeroSection() {
   return (
@@ -19,7 +19,7 @@ export default function HeroSection() {
           </p>
           <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: '2.5rem' }}>
             <Link href="/register"><button className="btn-gold" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '1rem', padding: '0.85rem 2rem' }}>Start free <ArrowRight size={16} /></button></Link>
-            <button className="btn-outline" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '1rem', padding: '0.85rem 2rem' }}><Play size={16} />Watch demo</button>
+            <Link href="/studio"><button className="btn-outline" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '1rem', padding: '0.85rem 2rem' }}>Open Studio</button></Link>
           </div>
           <div style={{ display: 'flex', gap: '2rem' }}>
             {[{ value: '10k+', label: 'Rooms designed' }, { value: '3', label: 'Free generations' }, { value: '11', label: 'Languages' }].map(s => (
@@ -34,18 +34,19 @@ export default function HeroSection() {
           <div className="glass-card" style={{ borderRadius: 20, padding: '1.5rem', boxShadow: '0 0 60px rgba(108,71,255,0.15)' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1rem', paddingBottom: '1rem', borderBottom: '1px solid #2a2a3a' }}>
               {['#ff5f57','#ffbd2e','#28c840'].map(c => <div key={c} style={{ width: 12, height: 12, borderRadius: '50%', background: c }} />)}
+              <span style={{ marginLeft: '0.5rem', color: '#9999aa', fontSize: '0.8rem' }}>AI Studio</span>
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
               <div>
-                <div style={{ fontSize: '0.75rem', color: '#9999aa', marginBottom: '0.5rem', textTransform: 'uppercase' }}>Before</div>
+                <div style={{ fontSize: '0.75rem', color: '#9999aa', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Before</div>
                 <div style={{ height: 140, borderRadius: 12, background: 'linear-gradient(135deg, #1a1a24, #2a2a3a)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Layers size={36} color="#2a2a3a" /></div>
               </div>
               <div>
-                <div style={{ fontSize: '0.75rem', color: '#c9a84c', marginBottom: '0.5rem', textTransform: 'uppercase' }}>After ✦</div>
+                <div style={{ fontSize: '0.75rem', color: '#c9a84c', marginBottom: '0.5rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>After ✦</div>
                 <div style={{ height: 140, borderRadius: 12, background: 'linear-gradient(135deg, #1a1228, #2a1a3a)', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 0 30px rgba(108,71,255,0.2)' }}><Box size={36} color="#6c47ff" /></div>
               </div>
             </div>
-            <button className="btn-gold" style={{ width: '100%' }}>✦ Generate Design</button>
+            <Link href="/studio"><button className="btn-gold" style={{ width: '100%' }}>✦ Try the Studio</button></Link>
           </div>
         </div>
       </div>
