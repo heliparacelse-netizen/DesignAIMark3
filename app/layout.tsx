@@ -1,11 +1,10 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import { Providers } from '@/components/Providers'
-import DesignCopilot from '@/components/DesignCopilot'
 
 export const metadata: Metadata = {
-  title: 'DesignAI — AI Interior Design Studio',
-  description: 'Transform any room with AI-powered interior design.',
+  title: 'Lumara — AI Interior Design Studio',
+  description: 'Transform any room with AI-powered interior design. Lumara beats Homestyler, Interior AI, and Spacely AI.',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -14,7 +13,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <Providers>
           {children}
-          <DesignCopilot />
         </Providers>
       </body>
     </html>
