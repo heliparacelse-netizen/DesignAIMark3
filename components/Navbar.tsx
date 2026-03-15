@@ -8,9 +8,9 @@ export default function Navbar() {
   const { data: session } = useSession()
   const [scrolled, setScrolled] = useState(false)
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 20)
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
+    const h = () => setScrolled(window.scrollY > 20)
+    window.addEventListener('scroll', h)
+    return () => window.removeEventListener('scroll', h)
   }, [])
   return (
     <nav style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 50, background: scrolled ? 'rgba(10,10,15,0.92)' : 'transparent', backdropFilter: scrolled ? 'blur(20px)' : 'none', borderBottom: scrolled ? '1px solid #2a2a3a' : 'none', transition: 'all 0.3s' }}>
@@ -22,10 +22,8 @@ export default function Navbar() {
           <span style={{ fontWeight: 800, fontSize: '1.2rem', color: '#f5f5f0', letterSpacing: '-0.02em' }}>Lumara</span>
         </Link>
         <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
-          {['Studio', 'Pricing', 'Compare'].map(item => (
-            <Link key={item} href={item === 'Studio' ? '/studio' : `#${item.toLowerCase()}`} style={{ color: '#9999aa', fontSize: '0.9rem', textDecoration: 'none', transition: 'color 0.2s' }}
-              onMouseEnter={(e: any) => (e.target.style.color = '#f5f5f0')}
-              onMouseLeave={(e: any) => (e.target.style.color = '#9999aa')}>{item}</Link>
+          {[['Studio', '/studio'], ['Pricing', '#pricing'], ['Compare', '#comparison']].map(([label, href]) => (
+            <Link key={label} href={href} style={{ color: '#9999aa', fontSize: '0.9rem', textDecoration: 'none' }}>{label}</Link>
           ))}
         </div>
         <div style={{ display: 'flex', gap: '0.75rem' }}>

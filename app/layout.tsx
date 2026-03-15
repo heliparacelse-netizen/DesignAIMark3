@@ -4,16 +4,14 @@ import { Providers } from '@/components/Providers'
 
 export const metadata: Metadata = {
   title: 'Lumara — AI Interior Design Studio',
-  description: 'Transform any room with AI-powered interior design. Lumara beats Homestyler, Interior AI, and Spacely AI.',
+  description: 'Transform any room with AI. Lumara beats Homestyler, Interior AI, and Spacely AI.',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body>
-        <Providers>
-          {children}
-        </Providers>
+        <Providers>{children}</Providers>
       </body>
     </html>
   )
