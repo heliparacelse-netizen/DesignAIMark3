@@ -5,7 +5,7 @@ import DesignCopilot from '@/components/DesignCopilot'
 
 export const metadata: Metadata = {
   title: 'DesignAI — AI Interior Design Studio',
-  description: 'Transform any room with AI-powered interior design. Beats Homestyler, Interior AI, and Spacely AI.',
+  description: 'Transform any room with AI-powered interior design.',
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
