@@ -1,13 +1,13 @@
 'use client'
 import { useState, useRef, useCallback, useEffect } from 'react'
 import Link from 'next/link'
-import { Upload, Wand2, Sparkles, ArrowLeft, Zap, Brain, Sun, Sofa, Download, X, ImageIcon, Box } from 'lucide-react'
+import { Upload, Wand2, Sparkles, ArrowLeft, Zap, Brain, Sun, Sofa, X } from 'lucide-react'
 import api from '@/lib/api'
 
 const roomTypes = ['Living Room', 'Bedroom', 'Kitchen', 'Bathroom', 'Office', 'Dining Room']
 const styles = ['Modern', 'Minimal', 'Luxury', 'Scandinavian', 'Industrial', 'Classic', 'Japandi', 'Bohemian']
 const promptExamples = [
-  'Modern japandi living room with warm lighting',
+  'Warm japandi living room with natural materials',
   'Luxury minimalist bedroom with gold accents',
   'Scandinavian kitchen with natural wood tones',
   'Industrial office with exposed brick walls',
@@ -20,7 +20,6 @@ export default function StudioPage() {
   const [generating, setGenerating] = useState(false)
   const [generated, setGenerated] = useState(false)
   const [generatedImage, setGeneratedImage] = useState<string | null>(null)
-  const [generationId, setGenerationId] = useState<string | null>(null)
   const [tokensLeft, setTokensLeft] = useState<number | null>(null)
   const [error, setError] = useState('')
   const [lighting, setLighting] = useState(false)
@@ -35,7 +34,6 @@ export default function StudioPage() {
   const pollRef = useRef<any>(null)
 
   useEffect(() => {
-    // Load token balance
     api.get('/api/tokens').then(data => {
       if (data.tokens !== undefined) setTokensLeft(data.tokens)
     }).catch(() => {})
@@ -64,38 +62,14 @@ export default function StudioPage() {
   }, [handleFile])
 
   const handleGenerate = async () => {
-    if (!api.getToken()) {
-      setError('Please sign in to generate designs.')
-      return
-    }
-    if (tokensLeft !== null && tokensLeft <= 0) {
-      setError('No tokens remaining. Please upgrade your plan.')
-      return
-    }
-    setGenerating(true)
-    setError('')
-    setGenerated(false)
-    setGeneratedImage(null)
-
+    if (!api.getToken()) { setError('Please sign in to generate designs.'); return }
+    if (tokensLeft !== null && tokensLeft <= 0) { setError('No tokens remaining. Please upgrade your plan.'); return }
+    setGenerating(true); setError(''); setGenerated(false); setGeneratedImage(null)
     try {
-      const data = await api.post('/api/generate', {
-        image: uploadedImage || null,
-        style,
-        roomType: room,
-        prompt: prompt || null,
-      })
-
-      if (data.error) {
-        setError(data.error)
-        setGenerating(false)
-        return
-      }
-
+      const data = await api.post('/api/generate', { image: uploadedImage || null, style, roomType: room, prompt: prompt || null })
+      if (data.error) { setError(data.error); setGenerating(false); return }
       const genId = data.generationId
-      setGenerationId(genId)
       if (data.tokensRemaining !== undefined) setTokensLeft(data.tokensRemaining)
-
-      // Poll for result
       pollRef.current = setInterval(async () => {
         const status = await api.get(`/api/generate/status/${genId}`)
         if (status.status === 'done' && status.imageUrl) {
@@ -107,14 +81,10 @@ export default function StudioPage() {
           clearInterval(pollRef.current)
           setError('Generation failed. Your token has been refunded.')
           setGenerating(false)
-          // Refresh token count
           api.get('/api/tokens').then(d => { if (d.tokens !== undefined) setTokensLeft(d.tokens) })
         }
       }, 3000)
-    } catch (e: any) {
-      setError(e.message || 'Generation failed')
-      setGenerating(false)
-    }
+    } catch (e: any) { setError(e.message || 'Generation failed'); setGenerating(false) }
   }
 
   const handleSlider = (e: React.MouseEvent) => {
@@ -153,7 +123,6 @@ export default function StudioPage() {
               {tokensLeft} token{tokensLeft !== 1 ? 's' : ''} left
             </div>
           )}
-          <div style={{ background: 'rgba(201,168,76,0.1)', border: '1px solid rgba(201,168,76,0.2)', borderRadius: '9999px', padding: '0.25rem 0.75rem', fontSize: '0.75rem', color: '#c9a84c' }}>✦ Powered by Replicate AI</div>
         </div>
       </div>
 
@@ -213,19 +182,19 @@ export default function StudioPage() {
             </div>
             <Toggle value={autoDetect} onChange={setAutoDetect} label="Auto room detection" icon={Brain} />
             <Toggle value={lighting} onChange={setLighting} label="Lighting enhancement" icon={Sun} />
-            <Toggle value={furnitureRealism} onChange={setFurnitureRealism} label="Furniture realism mode" icon={Sofa} />
+            <Toggle value={furnitureRealism} onChange={setFurnitureRealism} label="Furniture realism" icon={Sofa} />
           </div>
 
-          {error && <div style={{ background: 'rgba(255,80,80,0.1)', border: '1px solid rgba(255,80,80,0.3)', borderRadius: 10, padding: '0.75rem', color: '#ff8080', fontSize: '0.85rem' }}>{error}</div>}
+          {error && <div style={{ background: 'rgba(255,80,80,0.1)', border: '1px solid rgba(255,80,80,0.3)', borderRadius: 10, padding: '0.75rem', color: '#ff8080', fontSize: '0.85rem' }}>{error}<br/>{error.includes('token') && <Link href="/dashboard/billing" style={{ color: '#c9a84c' }}>Upgrade plan →</Link>}</div>}
 
           <button onClick={handleGenerate} disabled={generating} className="btn-gold" style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', fontSize: '1rem', padding: '0.9rem', opacity: generating ? 0.8 : 1 }}>
             <Wand2 size={18} />{generating ? 'Generating...' : '✦ Generate Design'}
           </button>
 
           {!api.getToken() && (
-            <div style={{ textAlign: 'center', fontSize: '0.82rem', color: '#9999aa' }}>
+            <p style={{ textAlign: 'center', fontSize: '0.82rem', color: '#9999aa' }}>
               <Link href="/login" style={{ color: '#c9a84c', textDecoration: 'none' }}>Sign in</Link> to generate designs
-            </div>
+            </p>
           )}
         </div>
 
@@ -243,8 +212,8 @@ export default function StudioPage() {
               <div style={{ marginBottom: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <span style={{ color: '#9999aa', fontSize: '0.85rem' }}>Drag slider to compare</span>
                 <div style={{ display: 'flex', gap: '0.5rem' }}>
-                  <a href={generatedImage} download="lumara-design.jpg" className="btn-gold" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 1rem', fontSize: '0.85rem', textDecoration: 'none', borderRadius: '9999px' }}>
-                    <Download size={14} />Download
+                  <a href={generatedImage} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 1rem', fontSize: '0.85rem', textDecoration: 'none', borderRadius: '9999px', background: 'linear-gradient(135deg,#c9a84c,#f0c96e)', color: '#0a0a0f', fontWeight: 600 }}>
+                    ⬇ Download
                   </a>
                   <button className="btn-outline" onClick={() => { setGenerated(false); setGeneratedImage(null) }} style={{ padding: '0.5rem 1rem', fontSize: '0.85rem' }}>Try another</button>
                 </div>
