@@ -1,9 +1,9 @@
 'use client'
 import { useState } from 'react'
 import Link from 'next/link'
-import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { Sparkles, Mail, Lock, ArrowRight } from 'lucide-react'
+import api from '@/lib/api'
 
 export default function LoginPage() {
   const router = useRouter()
@@ -16,22 +16,27 @@ export default function LoginPage() {
     e.preventDefault()
     setLoading(true)
     setError('')
-    const result = await signIn('credentials', { email, password, redirect: false })
-    if (result?.error) { setError('Invalid email or password'); setLoading(false) }
-    else router.push('/dashboard')
+    const data = await api.post('/api/auth/login', { email, password }, false)
+    if (data.token) {
+      api.setToken(data.token)
+      router.push('/dashboard')
+    } else {
+      setError(data.error || 'Login failed')
+      setLoading(false)
+    }
   }
 
-  const inputStyle: any = { width: '100%', background: '#0a0a0f', border: '1px solid #2a2a3a', borderRadius: 10, padding: '0.75rem 0.75rem 0.75rem 2.5rem', color: '#f5f5f0', fontSize: '0.9rem', outline: 'none' }
+  const inputStyle: any = { width: '100%', background: '#0a0a0f', border: '1px solid #2a2a3a', borderRadius: 10, padding: '0.75rem 0.75rem 0.75rem 2.5rem', color: '#f5f5f0', fontSize: '0.9rem', outline: 'none', boxSizing: 'border-box' }
 
   return (
     <div style={{ minHeight: '100vh', background: '#0a0a0f', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' }}>
       <div style={{ width: '100%', maxWidth: 420 }}>
         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
           <Link href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none' }}>
-            <div style={{ width: 40, height: 40, borderRadius: 10, background: 'linear-gradient(135deg, #c9a84c, #f0c96e)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ width: 40, height: 40, borderRadius: 10, background: 'linear-gradient(135deg,#c9a84c,#f0c96e)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <Sparkles size={20} color="#0a0a0f" />
             </div>
-            <span style={{ fontWeight: 700, fontSize: '1.3rem', color: '#f5f5f0' }}>DesignAI</span>
+            <span style={{ fontWeight: 800, fontSize: '1.3rem', color: '#f5f5f0' }}>Lumara</span>
           </Link>
         </div>
         <div className="glass-card" style={{ padding: '2.5rem', borderRadius: 20 }}>
@@ -48,7 +53,7 @@ export default function LoginPage() {
               <input type="password" value={password} onChange={e => setPassword(e.target.value)} required placeholder="••••••••" style={inputStyle} />
             </div>
             <button type="submit" disabled={loading} className="btn-gold" style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.5rem', opacity: loading ? 0.7 : 1 }}>
-              {loading ? 'Signing in...' : <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>Sign in <ArrowRight size={16} /></span>}
+              {loading ? 'Signing in...' : <><span>Sign in</span><ArrowRight size={16} /></>}
             </button>
           </form>
           <p style={{ textAlign: 'center', color: '#9999aa', fontSize: '0.85rem', marginTop: '1.5rem' }}>
