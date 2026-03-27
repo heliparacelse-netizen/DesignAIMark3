@@ -1,12 +1,12 @@
 'use client'
 import { useState, useRef, useEffect, useCallback } from 'react'
 import { X, Send, Sparkles, Upload, Sofa, Wand2, ChevronRight, Image as ImageIcon } from 'lucide-react'
+import api from '@/lib/api'
 
 interface Message { role: 'user' | 'assistant'; content: string; image?: string }
 
 const quickActions = [
-  { id: 'analyze', icon: 'ImageIcon', label: 'Analyze my room', color: '#c9a84c', prompt: 'Analyze this room: 1) Current style 2) Main issues 3) Top 3 improvements' },
-  { id: 'furniture', icon: 'Sofa', label: 'Suggest furniture', color: '#6c47ff', prompt: 'Suggest specific furniture: style, material, price range, where to buy.' },
+  { id: 'furniture', icon: 'Sofa', label: 'Suggest furniture', color: '#6c47ff', prompt: 'Suggest specific furniture pieces for a living room. Include style, material, and approximate price range.' },
   { id: 'prompt', icon: 'Wand2', label: 'Improve my prompt', color: '#28c840', prompt: 'Help me write a better AI interior design prompt. Ask about my preferences first.' },
 ]
 
@@ -19,12 +19,11 @@ const suggestions = [
 
 export default function SidebarChat({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const [messages, setMessages] = useState<Message[]>([
-    { role: 'assistant', content: 'Hi! I am your Lumara AI Assistant ✦\n\nI can analyze your room, suggest furniture, and help craft perfect prompts. Try a quick action or ask me anything!' }
+    { role: 'assistant', content: 'Hi! I am your Lumara AI Assistant ✦\n\nAsk me anything about interior design!' }
   ])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
   const [uploadedImage, setUploadedImage] = useState<string | null>(null)
-  const [activeAction, setActiveAction] = useState<string | null>(null)
   const bottomRef = useRef<HTMLDivElement>(null)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
@@ -41,24 +40,21 @@ export default function SidebarChat({ isOpen, onClose }: { isOpen: boolean; onCl
     setUploadedImage(null)
     setLoading(true)
     try {
+      const token = api.getToken()
       const res = await fetch('/api/copilot', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': token ? `Bearer ${token}` : ''
+        },
         body: JSON.stringify({ messages: newMessages.map(m => ({ role: m.role, content: m.image ? '[Image attached] ' + m.content : m.content })) })
       })
       const data = await res.json()
       setMessages(prev => [...prev, { role: 'assistant', content: data.reply || 'Please try again.' }])
     } catch {
-      setMessages(prev => [...prev, { role: 'assistant', content: 'Add OPENAI_API_KEY to Vercel env vars to enable AI chat.' }])
+      setMessages(prev => [...prev, { role: 'assistant', content: 'Service temporarily unavailable.' }])
     }
     setLoading(false)
-    setActiveAction(null)
-  }
-
-  const handleAction = (action: typeof quickActions[0]) => {
-    setActiveAction(action.id)
-    if (action.id === 'analyze') { fileInputRef.current?.click() }
-    else { sendMessage(action.prompt) }
   }
 
   const handleFile = (file: File) => {
@@ -66,14 +62,13 @@ export default function SidebarChat({ isOpen, onClose }: { isOpen: boolean; onCl
     reader.onload = e => {
       const img = e.target?.result as string
       setUploadedImage(img)
-      sendMessage('Please analyze this room photo and give detailed design recommendations.', img)
     }
     reader.readAsDataURL(file)
   }
 
-  if (!isOpen) return null
-
   const iconMap: any = { ImageIcon, Sofa, Wand2 }
+
+  if (!isOpen) return null
 
   return (
     <div style={{ position: 'fixed', top: 0, right: 0, bottom: 0, width: 380, background: '#111118', borderLeft: '1px solid #2a2a3a', display: 'flex', flexDirection: 'column', zIndex: 50, boxShadow: '-20px 0 60px rgba(0,0,0,0.4)' }}>
@@ -101,8 +96,8 @@ export default function SidebarChat({ isOpen, onClose }: { isOpen: boolean; onCl
           {quickActions.map(action => {
             const Icon = iconMap[action.icon]
             return (
-              <button key={action.id} onClick={() => handleAction(action)}
-                style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.6rem 0.8rem', borderRadius: 10, background: activeAction === action.id ? action.color + '18' : '#0a0a0f', border: '1px solid ' + (activeAction === action.id ? action.color + '50' : '#2a2a3a'), cursor: 'pointer', transition: 'all 0.2s', width: '100%', textAlign: 'left' }}>
+              <button key={action.id} onClick={() => sendMessage(action.prompt)}
+                style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.6rem 0.8rem', borderRadius: 10, background: '#0a0a0f', border: '1px solid #2a2a3a', cursor: 'pointer', transition: 'all 0.2s', width: '100%', textAlign: 'left' }}>
                 <div style={{ width: 28, height: 28, borderRadius: 7, background: action.color + '18', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
                   {Icon && <Icon size={14} color={action.color} />}
                 </div>
