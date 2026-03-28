@@ -212,7 +212,7 @@ export default function StudioPage() {
               <div style={{ marginBottom: '1rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                 <span style={{ color: '#9999aa', fontSize: '0.85rem' }}>Drag slider to compare</span>
                 <div style={{ display: 'flex', gap: '0.5rem' }}>
-                  <a href={generatedImage} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 1rem', fontSize: '0.85rem', textDecoration: 'none', borderRadius: '9999px', background: 'linear-gradient(135deg,#c9a84c,#f0c96e)', color: '#0a0a0f', fontWeight: 600 }}>
+                  <a href={generatedImage} download="lumara-design.png" target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem 1rem', fontSize: '0.85rem', textDecoration: 'none', borderRadius: '9999px', background: 'linear-gradient(135deg,#c9a84c,#f0c96e)', color: '#0a0a0f', fontWeight: 600 }}>
                     ⬇ Download
                   </a>
                   <button className="btn-outline" onClick={() => { setGenerated(false); setGeneratedImage(null) }} style={{ padding: '0.5rem 1rem', fontSize: '0.85rem' }}>Try another</button>
