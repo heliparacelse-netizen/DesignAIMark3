@@ -1,21 +1,14 @@
 'use client'
 import { useState, useRef, useEffect } from 'react'
-import { X, Send, Sparkles, Upload, Sofa, Wand2, ChevronRight, Image as ImageIcon } from 'lucide-react'
+import { X, Send, Sparkles, Upload, ChevronRight } from 'lucide-react'
 import api from '@/lib/api'
 
 interface Message { role: 'user' | 'assistant'; content: string; image?: string }
 
 const quickActions = [
-  { id: 'analyze', label: 'Analyze my room', color: '#c9a84c', prompt: 'Analyze my room and tell me: 1) Current style 2) Main issues 3) Top 3 improvements I can make.' },
-  { id: 'furniture', label: 'Suggest furniture', color: '#6c47ff', prompt: 'Suggest specific furniture pieces for my room. Include style, material, and approximate price range.' },
-  { id: 'prompt', label: 'Improve my prompt', color: '#28c840', prompt: 'Help me write a better AI interior design prompt. Ask me about my preferences first.' },
-]
-
-const suggestions = [
-  'Best colors for a small bedroom?',
-  'How to mix modern and vintage?',
-  'Lighting tips for home office?',
-  'Japandi vs Scandinavian?',
+  { id: 'analyze', label: 'Analyze my room', color: '#c9a84c', prompt: 'Analyze my room and tell me: 1) Current style 2) Main issues 3) Top 3 improvements.' },
+  { id: 'furniture', label: 'Suggest furniture', color: '#6c47ff', prompt: 'Suggest specific furniture for my room with style, material, and price range.' },
+  { id: 'prompt', label: 'Improve my prompt', color: '#28c840', prompt: 'Help me write a better AI interior design prompt. Ask my preferences first.' },
 ]
 
 export default function SidebarChat({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
@@ -34,8 +27,7 @@ export default function SidebarChat({ isOpen, onClose }: { isOpen: boolean; onCl
     const msg = text || input
     if (!msg.trim() && !image) return
     setInput('')
-    const imgToSend = image || uploadedImage || undefined
-    const newMsg: Message = { role: 'user', content: msg, image: imgToSend }
+    const newMsg: Message = { role: 'user', content: msg, image: image || uploadedImage || undefined }
     const newMessages = [...messages, newMsg]
     setMessages(newMessages)
     setUploadedImage(null)
@@ -44,24 +36,15 @@ export default function SidebarChat({ isOpen, onClose }: { isOpen: boolean; onCl
       const token = api.getToken()
       const res = await fetch('/api/copilot', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
-        },
-        body: JSON.stringify({ messages: newMessages.map(m => ({ role: m.role, content: m.image ? '[Image attached] ' + m.content : m.content })) })
+        headers: { 'Content-Type': 'application/json', ...(token ? { 'Authorization': `Bearer ${token}` } : {}) },
+        body: JSON.stringify({ messages: newMessages.map(m => ({ role: m.role, content: m.image ? '[Image] ' + m.content : m.content })) })
       })
       const data = await res.json()
       setMessages(prev => [...prev, { role: 'assistant', content: data.reply || 'Please try again.' }])
     } catch {
-      setMessages(prev => [...prev, { role: 'assistant', content: 'AI temporarily waking up (Render cold start). Please try again in 30 seconds.' }])
+      setMessages(prev => [...prev, { role: 'assistant', content: 'AI temporarily waking up. Please try again in 30 seconds.' }])
     }
     setLoading(false)
-  }
-
-  const handleFile = (file: File) => {
-    const reader = new FileReader()
-    reader.onload = e => setUploadedImage(e.target?.result as string)
-    reader.readAsDataURL(file)
   }
 
   if (!isOpen) return null
@@ -69,7 +52,7 @@ export default function SidebarChat({ isOpen, onClose }: { isOpen: boolean; onCl
   return (
     <div style={{ position: 'fixed', top: 0, right: 0, bottom: 0, width: 380, background: '#111118', borderLeft: '1px solid #2a2a3a', display: 'flex', flexDirection: 'column', zIndex: 50, boxShadow: '-20px 0 60px rgba(0,0,0,0.4)' }}>
       <style>{'.dot{animation:dp 1.4s ease-in-out infinite}@keyframes dp{0%,80%,100%{opacity:.3;transform:scale(.8)}40%{opacity:1;transform:scale(1)}}'}</style>
-      <input ref={fileInputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={e => e.target.files?.[0] && handleFile(e.target.files[0])} />
+      <input ref={fileInputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={e => e.target.files?.[0] && (() => { const r = new FileReader(); r.onload = ev => setUploadedImage(ev.target?.result as string); r.readAsDataURL(e.target.files![0]) })()} />
 
       <div style={{ padding: '1.25rem 1.5rem', borderBottom: '1px solid #2a2a3a', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(201,168,76,0.04)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
@@ -89,15 +72,15 @@ export default function SidebarChat({ isOpen, onClose }: { isOpen: boolean; onCl
       <div style={{ padding: '1rem 1.25rem', borderBottom: '1px solid #2a2a3a' }}>
         <div style={{ fontSize: '0.72rem', color: '#9999aa', marginBottom: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Quick Actions</div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.45rem' }}>
-          {quickActions.map(action => (
-            <button key={action.id} onClick={() => sendMessage(action.prompt)}
+          {quickActions.map(a => (
+            <button key={a.id} onClick={() => sendMessage(a.prompt)}
               style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.6rem 0.8rem', borderRadius: 10, background: '#0a0a0f', border: '1px solid #2a2a3a', cursor: 'pointer', width: '100%', textAlign: 'left', transition: 'all 0.2s' }}
-              onMouseEnter={e => (e.currentTarget.style.borderColor = action.color + '50')}
+              onMouseEnter={e => (e.currentTarget.style.borderColor = a.color + '50')}
               onMouseLeave={e => (e.currentTarget.style.borderColor = '#2a2a3a')}>
-              <div style={{ width: 28, height: 28, borderRadius: 7, background: action.color + '18', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                <Sparkles size={13} color={action.color} />
+              <div style={{ width: 28, height: 28, borderRadius: 7, background: a.color + '18', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <Sparkles size={13} color={a.color} />
               </div>
-              <span style={{ color: '#f5f5f0', fontSize: '0.83rem', fontWeight: 500 }}>{action.label}</span>
+              <span style={{ color: '#f5f5f0', fontSize: '0.83rem', fontWeight: 500 }}>{a.label}</span>
               <ChevronRight size={13} color="#9999aa" style={{ marginLeft: 'auto' }} />
             </button>
           ))}
@@ -108,7 +91,7 @@ export default function SidebarChat({ isOpen, onClose }: { isOpen: boolean; onCl
         {messages.map((msg, i) => (
           <div key={i} style={{ display: 'flex', justifyContent: msg.role === 'user' ? 'flex-end' : 'flex-start' }}>
             <div style={{ maxWidth: '85%' }}>
-              {msg.image && <img src={msg.image} alt="room" style={{ width: '100%', borderRadius: 10, marginBottom: '0.4rem', objectFit: 'cover', maxHeight: 150 }} />}
+              {msg.image && <img src={msg.image} alt="" style={{ width: '100%', borderRadius: 10, marginBottom: '0.4rem', maxHeight: 150, objectFit: 'cover' }} />}
               <div style={{ padding: '0.65rem 0.9rem', borderRadius: msg.role === 'user' ? '16px 16px 4px 16px' : '4px 16px 16px 16px', background: msg.role === 'user' ? 'linear-gradient(135deg,#c9a84c,#f0c96e)' : '#1a1a28', color: msg.role === 'user' ? '#0a0a0f' : '#f5f5f0', fontSize: '0.84rem', lineHeight: 1.6, whiteSpace: 'pre-wrap' }}>
                 {msg.content}
               </div>
@@ -122,23 +105,13 @@ export default function SidebarChat({ isOpen, onClose }: { isOpen: boolean; onCl
             </div>
           </div>
         )}
-        {messages.length === 1 && !loading && (
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
-            {suggestions.map(s => (
-              <button key={s} onClick={() => sendMessage(s)}
-                style={{ fontSize: '0.74rem', padding: '0.3rem 0.65rem', borderRadius: '9999px', background: '#2a2a3a', border: '1px solid #3a3a4a', color: '#9999aa', cursor: 'pointer' }}>
-                {s}
-              </button>
-            ))}
-          </div>
-        )}
         <div ref={bottomRef} />
       </div>
 
       {uploadedImage && (
         <div style={{ padding: '0.5rem 1.25rem', borderTop: '1px solid #2a2a3a' }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '0.5rem', background: '#0a0a0f', borderRadius: 8, border: '1px solid #2a2a3a' }}>
-            <img src={uploadedImage} alt="preview" style={{ width: 40, height: 40, borderRadius: 6, objectFit: 'cover' }} />
+            <img src={uploadedImage} alt="" style={{ width: 40, height: 40, borderRadius: 6, objectFit: 'cover' }} />
             <span style={{ color: '#9999aa', fontSize: '0.8rem', flex: 1 }}>Image ready</span>
             <button onClick={() => setUploadedImage(null)} style={{ background: 'none', border: 'none', cursor: 'pointer', color: '#9999aa' }}><X size={14} /></button>
           </div>

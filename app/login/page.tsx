@@ -14,16 +14,10 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setLoading(true)
-    setError('')
+    setLoading(true); setError('')
     const data = await api.post('/api/auth/login', { email, password }, false)
-    if (data.token) {
-      api.setToken(data.token)
-      router.push('/dashboard')
-    } else {
-      setError(data.error || 'Login failed')
-      setLoading(false)
-    }
+    if (data.token) { api.setToken(data.token); router.push('/dashboard') }
+    else { setError(data.error || 'Login failed'); setLoading(false) }
   }
 
   const inputStyle: any = { width: '100%', background: '#0a0a0f', border: '1px solid #2a2a3a', borderRadius: 10, padding: '0.75rem 0.75rem 0.75rem 2.5rem', color: '#f5f5f0', fontSize: '0.9rem', outline: 'none', boxSizing: 'border-box' }
@@ -33,10 +27,8 @@ export default function LoginPage() {
       <div style={{ width: '100%', maxWidth: 420 }}>
         <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
           <Link href="/" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none' }}>
-            <div style={{ width: 40, height: 40, borderRadius: 10, background: 'linear-gradient(135deg,#c9a84c,#f0c96e)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Sparkles size={20} color="#0a0a0f" />
-            </div>
-            <span style={{ fontWeight: 800, fontSize: '1.3rem', color: '#f5f5f0' }}>Lumara</span>
+            <div style={{ width: 40, height: 40, borderRadius: 10, background: 'linear-gradient(135deg,#c9a84c,#f0c96e)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Sparkles size={20} color="#0a0a0f" /></div>
+            <span style={{ fontWeight: 800, fontSize: '1.3rem', color: '#f5f5f0' }}>Roomvera AI</span>
           </Link>
         </div>
         <div className="glass-card" style={{ padding: '2.5rem', borderRadius: 20 }}>
