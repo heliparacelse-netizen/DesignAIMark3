@@ -19,10 +19,10 @@ export default function Navbar() {
           <div style={{ width: 32, height: 32, borderRadius: 8, background: 'linear-gradient(135deg,#c9a84c,#f0c96e)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <Sparkles size={16} color="#0a0a0f" />
           </div>
-          <span style={{ fontWeight: 800, fontSize: '1.2rem', color: '#f5f5f0', letterSpacing: '-0.02em' }}>Lumara</span>
+          <span style={{ fontWeight: 800, fontSize: '1.2rem', color: '#f5f5f0', letterSpacing: '-0.02em' }}>Roomvera AI</span>
         </Link>
         <div style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
-          {[['Studio', '/studio'], ['Pricing', '#pricing'], ['Compare', '#comparison']].map(([label, href]) => (
+          {[['Studio', '/studio'], ['Pricing', '#pricing']].map(([label, href]) => (
             <Link key={label} href={href} style={{ color: '#9999aa', fontSize: '0.9rem', textDecoration: 'none' }}>{label}</Link>
           ))}
         </div>

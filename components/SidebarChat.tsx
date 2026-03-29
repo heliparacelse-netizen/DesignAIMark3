@@ -1,13 +1,14 @@
 'use client'
-import { useState, useRef, useEffect, useCallback } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { X, Send, Sparkles, Upload, Sofa, Wand2, ChevronRight, Image as ImageIcon } from 'lucide-react'
 import api from '@/lib/api'
 
 interface Message { role: 'user' | 'assistant'; content: string; image?: string }
 
 const quickActions = [
-  { id: 'furniture', icon: 'Sofa', label: 'Suggest furniture', color: '#6c47ff', prompt: 'Suggest specific furniture pieces for a living room. Include style, material, and approximate price range.' },
-  { id: 'prompt', icon: 'Wand2', label: 'Improve my prompt', color: '#28c840', prompt: 'Help me write a better AI interior design prompt. Ask about my preferences first.' },
+  { id: 'analyze', label: 'Analyze my room', color: '#c9a84c', prompt: 'Analyze my room and tell me: 1) Current style 2) Main issues 3) Top 3 improvements I can make.' },
+  { id: 'furniture', label: 'Suggest furniture', color: '#6c47ff', prompt: 'Suggest specific furniture pieces for my room. Include style, material, and approximate price range.' },
+  { id: 'prompt', label: 'Improve my prompt', color: '#28c840', prompt: 'Help me write a better AI interior design prompt. Ask me about my preferences first.' },
 ]
 
 const suggestions = [
@@ -19,7 +20,7 @@ const suggestions = [
 
 export default function SidebarChat({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) {
   const [messages, setMessages] = useState<Message[]>([
-    { role: 'assistant', content: 'Hi! I am your Lumara AI Assistant ✦\n\nAsk me anything about interior design!' }
+    { role: 'assistant', content: 'Hi! I am your Roomvera AI Assistant ✦\n\nI can help you choose styles, improve prompts, and give design advice. Try a quick action or ask me anything!' }
   ])
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
@@ -43,36 +44,31 @@ export default function SidebarChat({ isOpen, onClose }: { isOpen: boolean; onCl
       const token = api.getToken()
       const res = await fetch('/api/copilot', {
         method: 'POST',
-        headers: { 
+        headers: {
           'Content-Type': 'application/json',
-          'Authorization': token ? `Bearer ${token}` : ''
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
         },
         body: JSON.stringify({ messages: newMessages.map(m => ({ role: m.role, content: m.image ? '[Image attached] ' + m.content : m.content })) })
       })
       const data = await res.json()
       setMessages(prev => [...prev, { role: 'assistant', content: data.reply || 'Please try again.' }])
     } catch {
-      setMessages(prev => [...prev, { role: 'assistant', content: 'Service temporarily unavailable.' }])
+      setMessages(prev => [...prev, { role: 'assistant', content: 'AI temporarily waking up (Render cold start). Please try again in 30 seconds.' }])
     }
     setLoading(false)
   }
 
   const handleFile = (file: File) => {
     const reader = new FileReader()
-    reader.onload = e => {
-      const img = e.target?.result as string
-      setUploadedImage(img)
-    }
+    reader.onload = e => setUploadedImage(e.target?.result as string)
     reader.readAsDataURL(file)
   }
-
-  const iconMap: any = { ImageIcon, Sofa, Wand2 }
 
   if (!isOpen) return null
 
   return (
     <div style={{ position: 'fixed', top: 0, right: 0, bottom: 0, width: 380, background: '#111118', borderLeft: '1px solid #2a2a3a', display: 'flex', flexDirection: 'column', zIndex: 50, boxShadow: '-20px 0 60px rgba(0,0,0,0.4)' }}>
-      <style>{'.dot-pulse{animation:pulse 1.4s ease-in-out infinite} @keyframes pulse{0%,80%,100%{opacity:0.3;transform:scale(0.8)}40%{opacity:1;transform:scale(1)}}'}</style>
+      <style>{'.dot{animation:dp 1.4s ease-in-out infinite}@keyframes dp{0%,80%,100%{opacity:.3;transform:scale(.8)}40%{opacity:1;transform:scale(1)}}'}</style>
       <input ref={fileInputRef} type="file" accept="image/*" style={{ display: 'none' }} onChange={e => e.target.files?.[0] && handleFile(e.target.files[0])} />
 
       <div style={{ padding: '1.25rem 1.5rem', borderBottom: '1px solid #2a2a3a', display: 'flex', alignItems: 'center', justifyContent: 'space-between', background: 'rgba(201,168,76,0.04)' }}>
@@ -81,7 +77,7 @@ export default function SidebarChat({ isOpen, onClose }: { isOpen: boolean; onCl
             <Sparkles size={18} color="#0a0a0f" />
           </div>
           <div>
-            <div style={{ fontWeight: 700, color: '#f5f5f0', fontSize: '0.95rem' }}>Lumara AI</div>
+            <div style={{ fontWeight: 700, color: '#f5f5f0', fontSize: '0.95rem' }}>Roomvera AI</div>
             <div style={{ fontSize: '0.7rem', color: '#28c840', display: 'flex', alignItems: 'center', gap: '0.3rem' }}>
               <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#28c840' }} />Online
             </div>
@@ -93,19 +89,18 @@ export default function SidebarChat({ isOpen, onClose }: { isOpen: boolean; onCl
       <div style={{ padding: '1rem 1.25rem', borderBottom: '1px solid #2a2a3a' }}>
         <div style={{ fontSize: '0.72rem', color: '#9999aa', marginBottom: '0.65rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Quick Actions</div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.45rem' }}>
-          {quickActions.map(action => {
-            const Icon = iconMap[action.icon]
-            return (
-              <button key={action.id} onClick={() => sendMessage(action.prompt)}
-                style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.6rem 0.8rem', borderRadius: 10, background: '#0a0a0f', border: '1px solid #2a2a3a', cursor: 'pointer', transition: 'all 0.2s', width: '100%', textAlign: 'left' }}>
-                <div style={{ width: 28, height: 28, borderRadius: 7, background: action.color + '18', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                  {Icon && <Icon size={14} color={action.color} />}
-                </div>
-                <span style={{ color: '#f5f5f0', fontSize: '0.83rem', fontWeight: 500 }}>{action.label}</span>
-                <ChevronRight size={13} color="#9999aa" style={{ marginLeft: 'auto' }} />
-              </button>
-            )
-          })}
+          {quickActions.map(action => (
+            <button key={action.id} onClick={() => sendMessage(action.prompt)}
+              style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.6rem 0.8rem', borderRadius: 10, background: '#0a0a0f', border: '1px solid #2a2a3a', cursor: 'pointer', width: '100%', textAlign: 'left', transition: 'all 0.2s' }}
+              onMouseEnter={e => (e.currentTarget.style.borderColor = action.color + '50')}
+              onMouseLeave={e => (e.currentTarget.style.borderColor = '#2a2a3a')}>
+              <div style={{ width: 28, height: 28, borderRadius: 7, background: action.color + '18', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <Sparkles size={13} color={action.color} />
+              </div>
+              <span style={{ color: '#f5f5f0', fontSize: '0.83rem', fontWeight: 500 }}>{action.label}</span>
+              <ChevronRight size={13} color="#9999aa" style={{ marginLeft: 'auto' }} />
+            </button>
+          ))}
         </div>
       </div>
 
@@ -113,8 +108,8 @@ export default function SidebarChat({ isOpen, onClose }: { isOpen: boolean; onCl
         {messages.map((msg, i) => (
           <div key={i} style={{ display: 'flex', justifyContent: msg.role === 'user' ? 'flex-end' : 'flex-start' }}>
             <div style={{ maxWidth: '85%' }}>
-              {msg.image && <img src={msg.image} alt="room" style={{ width: '100%', borderRadius: 10, marginBottom: '0.4rem', display: 'block', maxHeight: 150, objectFit: 'cover' }} />}
-              <div style={{ padding: '0.65rem 0.9rem', borderRadius: msg.role === 'user' ? '16px 16px 4px 16px' : '4px 16px 16px 16px', background: msg.role === 'user' ? 'linear-gradient(135deg,#c9a84c,#f0c96e)' : '#1a1a28', color: msg.role === 'user' ? '#0a0a0f' : '#f5f5f0', fontSize: '0.84rem', lineHeight: 1.6, fontWeight: msg.role === 'user' ? 500 : 400, whiteSpace: 'pre-wrap' }}>
+              {msg.image && <img src={msg.image} alt="room" style={{ width: '100%', borderRadius: 10, marginBottom: '0.4rem', objectFit: 'cover', maxHeight: 150 }} />}
+              <div style={{ padding: '0.65rem 0.9rem', borderRadius: msg.role === 'user' ? '16px 16px 4px 16px' : '4px 16px 16px 16px', background: msg.role === 'user' ? 'linear-gradient(135deg,#c9a84c,#f0c96e)' : '#1a1a28', color: msg.role === 'user' ? '#0a0a0f' : '#f5f5f0', fontSize: '0.84rem', lineHeight: 1.6, whiteSpace: 'pre-wrap' }}>
                 {msg.content}
               </div>
             </div>
@@ -123,7 +118,7 @@ export default function SidebarChat({ isOpen, onClose }: { isOpen: boolean; onCl
         {loading && (
           <div style={{ display: 'flex' }}>
             <div style={{ padding: '0.65rem 0.9rem', borderRadius: '4px 16px 16px 16px', background: '#1a1a28', display: 'flex', gap: '0.3rem', alignItems: 'center' }}>
-              {[0,1,2].map(i => <div key={i} className="dot-pulse" style={{ width: 6, height: 6, borderRadius: '50%', background: '#c9a84c', animationDelay: i * 0.2 + 's' }} />)}
+              {[0,1,2].map(i => <div key={i} className="dot" style={{ width: 6, height: 6, borderRadius: '50%', background: '#c9a84c', animationDelay: i * 0.2 + 's' }} />)}
             </div>
           </div>
         )}
@@ -131,7 +126,7 @@ export default function SidebarChat({ isOpen, onClose }: { isOpen: boolean; onCl
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.4rem' }}>
             {suggestions.map(s => (
               <button key={s} onClick={() => sendMessage(s)}
-                style={{ fontSize: '0.74rem', padding: '0.3rem 0.65rem', borderRadius: '9999px', background: '#2a2a3a', border: '1px solid #3a3a4a', color: '#9999aa', cursor: 'pointer', transition: 'all 0.2s' }}>
+                style={{ fontSize: '0.74rem', padding: '0.3rem 0.65rem', borderRadius: '9999px', background: '#2a2a3a', border: '1px solid #3a3a4a', color: '#9999aa', cursor: 'pointer' }}>
                 {s}
               </button>
             ))}

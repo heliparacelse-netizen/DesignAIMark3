@@ -2,7 +2,9 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://designaimark3-backen
 
 const getToken = () => {
   if (typeof window === 'undefined') return null
-  return localStorage.getItem('lumara_token')
+  const token = localStorage.getItem('lumara_token')
+  if (!token || token === 'null' || token === 'undefined') return null
+  return token
 }
 
 export const api = {
@@ -15,7 +17,6 @@ export const api = {
     const res = await fetch(`${API_URL}${path}`, { method: 'POST', headers, body: JSON.stringify(body) })
     return res.json()
   },
-
   async get(path: string, auth = true) {
     const headers: any = {}
     if (auth) {
@@ -25,24 +26,16 @@ export const api = {
     const res = await fetch(`${API_URL}${path}`, { headers })
     return res.json()
   },
-
   async delete(path: string) {
     const token = getToken()
     const res = await fetch(`${API_URL}${path}`, {
       method: 'DELETE',
-      headers: { 'Authorization': `Bearer ${token}` }
+      headers: token ? { 'Authorization': `Bearer ${token}` } : {}
     })
     return res.json()
   },
-
-  setToken(token: string) {
-    localStorage.setItem('lumara_token', token)
-  },
-
-  removeToken() {
-    localStorage.removeItem('lumara_token')
-  },
-
+  setToken(token: string) { localStorage.setItem('lumara_token', token) },
+  removeToken() { localStorage.removeItem('lumara_token') },
   getToken,
 }
 
