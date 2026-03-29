@@ -19,7 +19,7 @@ function Sidebar({ active, onChatOpen }: { active: string; onChatOpen: () => voi
     <aside style={{ width: 240, background: '#111118', borderRight: '1px solid #2a2a3a', display: 'flex', flexDirection: 'column', position: 'fixed', top: 0, bottom: 0, left: 0, zIndex: 20 }}>
       <div style={{ padding: '1.5rem', borderBottom: '1px solid #2a2a3a', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
         <div style={{ width: 32, height: 32, borderRadius: 8, background: 'linear-gradient(135deg,#c9a84c,#f0c96e)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}><Sparkles size={16} color="#0a0a0f" /></div>
-        <span style={{ fontWeight: 800, color: '#f5f5f0', fontSize: '1.1rem', letterSpacing: '-0.02em' }}>Lumara</span>
+        <span style={{ fontWeight: 800, color: '#f5f5f0', fontSize: '1.1rem', letterSpacing: '-0.02em' }}>Roomvera AI</span>
       </div>
       <nav style={{ padding: '1rem', flex: 1 }}>
         {nav.map(item => { const Icon = item.icon; const isActive = active === item.label; return (
@@ -32,7 +32,7 @@ function Sidebar({ active, onChatOpen }: { active: string; onChatOpen: () => voi
       </nav>
       <div style={{ padding: '1rem', borderTop: '1px solid #2a2a3a', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
         <button onClick={onChatOpen} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.65rem 0.75rem', width: '100%', background: 'rgba(201,168,76,0.08)', border: '1px solid rgba(201,168,76,0.2)', cursor: 'pointer', color: '#c9a84c', fontSize: '0.9rem', borderRadius: 10, fontWeight: 600 }}>
-          <MessageCircle size={18} />Lumara AI
+          <MessageCircle size={18} />Roomvera AI
         </button>
         <button onClick={() => signOut({ callbackUrl: '/' })} style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.65rem 0.75rem', width: '100%', background: 'transparent', border: 'none', cursor: 'pointer', color: '#9999aa', fontSize: '0.9rem', borderRadius: 10 }}>
           <LogOut size={18} />Sign out

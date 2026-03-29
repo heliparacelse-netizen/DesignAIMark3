@@ -20,7 +20,7 @@ export default function ComparisonSection() {
       <div style={{ maxWidth: 900, margin: '0 auto', padding: '0 2rem' }}>
         <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
           <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 800, color: '#f5f5f0', marginBottom: '1rem' }}>
-            Why <span className="gold-gradient">DesignAI</span> beats the rest
+            Why <span className="gold-gradient">Roomvera AI</span> beats the rest
           </h2>
           <p style={{ color: '#9999aa' }}>We compared ourselves to the best — here's how we stack up.</p>
         </div>
@@ -29,7 +29,7 @@ export default function ComparisonSection() {
             <div style={{ color: '#9999aa', fontSize: '0.85rem', fontWeight: 600 }}>Feature</div>
             <div style={{ color: '#9999aa', fontSize: '0.85rem', fontWeight: 600, textAlign: 'center' }}>Homestyler</div>
             <div style={{ color: '#9999aa', fontSize: '0.85rem', fontWeight: 600, textAlign: 'center' }}>Interior AI</div>
-            <div style={{ color: '#c9a84c', fontSize: '0.85rem', fontWeight: 700, textAlign: 'center' }}>DesignAI ✦</div>
+            <div style={{ color: '#c9a84c', fontSize: '0.85rem', fontWeight: 700, textAlign: 'center' }}>Roomvera AI ✦</div>
           </div>
           {rows.map((row, i) => (
             <div key={row.feature} style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', padding: '1rem 1.5rem', borderBottom: i < rows.length - 1 ? '1px solid #2a2a3a' : 'none', background: i % 2 === 0 ? 'transparent' : 'rgba(22,22,31,0.5)', alignItems: 'center' }}>

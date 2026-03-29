@@ -14,7 +14,7 @@ export default function FeaturesSection() {
       <div style={{ maxWidth: 1280, margin: '0 auto', padding: '0 2rem' }}>
         <div style={{ textAlign: 'center', marginBottom: '4rem' }}>
           <h2 style={{ fontSize: 'clamp(2rem, 4vw, 3rem)', fontWeight: 800, letterSpacing: '-0.02em', color: '#f5f5f0', marginBottom: '1rem' }}>
-            Why creators choose <span className="gold-gradient">DesignAI</span>
+            Why creators choose <span className="gold-gradient">Roomvera AI</span>
           </h2>
           <p style={{ color: '#9999aa', maxWidth: 500, margin: '0 auto' }}>Everything you need to create stunning interior designs.</p>
         </div>

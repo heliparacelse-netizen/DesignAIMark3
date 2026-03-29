@@ -2,9 +2,9 @@
 import { Star } from 'lucide-react'
 
 const testimonials = [
-  { name: 'Sophie Martin', role: 'Interior Designer, Paris', quote: 'DesignAI completely transformed how I present concepts to clients. What used to take days now takes minutes.', avatar: 'SM' },
+  { name: 'Sophie Martin', role: 'Interior Designer, Paris', quote: 'Roomvera AI completely transformed how I present concepts to clients. What used to take days now takes minutes.', avatar: 'SM' },
   { name: 'James Chen', role: 'Architect, Singapore', quote: 'The AI understands spatial relationships better than I expected. The 3D preview feature is a game changer.', avatar: 'JC' },
-  { name: 'Maria Rodriguez', role: 'Home Stylist, Madrid', quote: 'My clients are blown away by the quality. I use DesignAI for every project now. Worth every euro.', avatar: 'MR' },
+  { name: 'Maria Rodriguez', role: 'Home Stylist, Madrid', quote: 'My clients are blown away by the quality. I use Roomvera AI for every project now. Worth every euro.', avatar: 'MR' },
 ]
 
 export default function TestimonialsSection() {
