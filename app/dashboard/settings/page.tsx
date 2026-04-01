@@ -81,8 +81,8 @@ export default function SettingsPage() {
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.25rem' }}><CreditCard size={18} color="#c9a84c" /><h2 style={{ fontWeight: 700, color: '#f5f5f0' }}>Billing</h2></div>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '1rem' }}>
             <div>
-              <div style={{ fontWeight: 600, color: '#f5f5f0', marginBottom: '0.25rem' }}>Free Plan — 3 tokens</div>
-              <div style={{ fontSize: '0.85rem', color: '#9999aa' }}>Upgrade for unlimited generations</div>
+              <div style={{ fontWeight: 600, color: '#f5f5f0', marginBottom: '0.25rem' }}>Free Plan — 100 tokens</div>
+              <div style={{ fontSize: '0.85rem', color: '#9999aa' }}>Upgrade for more tokens. 1 redesign = 25 tokens.</div>
             </div>
             <Link href="/dashboard/billing"><button className="btn-gold" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}><CreditCard size={16} />Manage subscription</button></Link>
           </div>

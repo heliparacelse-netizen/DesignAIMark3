@@ -48,7 +48,7 @@ export default function DashboardPage() {
 
   if (loading) return <div style={{ minHeight: '100vh', background: '#0a0a0f', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#c9a84c' }}>Loading...</div>
 
-  const planLimit: any = { free: 3, starter: 120, pro: 350, studio: 1000 }
+  const planLimit: any = { free: 100, starter: 500, pro: 1500, studio: 5000 }
 
   return (
     <div style={{ minHeight: '100vh', background: '#0a0a0f', display: 'flex' }}>

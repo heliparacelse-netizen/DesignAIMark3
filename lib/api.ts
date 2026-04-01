@@ -2,7 +2,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'https://designaimark3-backen
 
 const getToken = () => {
   if (typeof window === 'undefined') return null
-  const token = localStorage.getItem('lumara_token')
+  const token = localStorage.getItem('roomvera_token')
   if (!token || token === 'null' || token === 'undefined') return null
   return token
 }
@@ -34,8 +34,8 @@ export const api = {
     })
     return res.json()
   },
-  setToken(token: string) { localStorage.setItem('lumara_token', token) },
-  removeToken() { localStorage.removeItem('lumara_token') },
+  setToken(token: string) { localStorage.setItem('roomvera_token', token) },
+  removeToken() { localStorage.removeItem('roomvera_token') },
   getToken,
 }
 
