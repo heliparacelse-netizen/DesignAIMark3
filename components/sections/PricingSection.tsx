@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { useState } from 'react'
 
 const plans = [
-  { name: 'Free', price: '$0', period: '', tokens: 100, features: ['100 tokens (4 redesigns)', 'All styles', 'Watermarked export', 'AI assistant', 'Standard speed'], cta: 'Start free', href: '/register', highlighted: false, priceId: null },
+  { name: 'Free', price: '$0', period: '', tokens: 100, features: ['75 tokens (4 redesigns)', 'All styles', 'Watermarked export', 'AI assistant', 'Standard speed'], cta: 'Start free', href: '/register', highlighted: false, priceId: null },
   { name: 'Starter', price: '$12', period: '/mo', tokens: 500, features: ['500 tokens (20 redesigns)', 'All styles', 'HD export', 'No watermark', 'Email support'], cta: 'Get Starter', href: null, highlighted: false, priceId: 'price_starter' },
   { name: 'Pro', price: '$29', period: '/mo', tokens: 1500, features: ['1500 tokens (60 redesigns)', 'All styles', 'HD export', 'No watermark', 'Priority generation', 'Priority support'], cta: 'Get Pro', href: null, highlighted: true, priceId: 'price_pro' },
   { name: 'Studio', price: '$59', period: '/mo', tokens: 5000, features: ['5000 tokens (200 redesigns)', 'All styles', 'HD export', 'No watermark', 'Fast generation', 'Priority queue', 'Dedicated support'], cta: 'Get Studio', href: null, highlighted: false, priceId: 'price_studio' },

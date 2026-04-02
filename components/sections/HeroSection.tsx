@@ -24,14 +24,14 @@ export default function HeroSection() {
             Redesign any room<br />with <span className="gold-gradient">AI</span> instantly.
           </h1>
           <p style={{ fontSize: '1.1rem', color: '#9999aa', lineHeight: 1.7, maxWidth: 480, marginBottom: '2rem' }}>
-            Upload a photo of your room. Choose a style. Get a stunning AI redesign in seconds. Start free with 100 tokens.
+            Upload a photo of your room. Choose a style. Get a stunning AI redesign in seconds. Start free with 75 tokens.
           </p>
           <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: '2.5rem' }}>
             <Link href="/register"><button className="btn-gold" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '1rem', padding: '0.85rem 2rem' }}>Start free <ArrowRight size={16} /></button></Link>
             <Link href="/studio"><button className="btn-outline" style={{ fontSize: '1rem', padding: '0.85rem 2rem' }}>Open Studio</button></Link>
           </div>
           <div style={{ display: 'flex', gap: '2rem' }}>
-            {[{ value: '10k+', label: 'Rooms redesigned' }, { value: '4', label: 'Free redesigns' }, { value: '8', label: 'Design styles' }].map(s => (
+            {[{ value: '10k+', label: 'Rooms redesigned' }, { value: '3', label: 'Free redesigns' }, { value: '8', label: 'Design styles' }].map(s => (
               <div key={s.label}>
                 <div style={{ fontSize: '1.5rem', fontWeight: 700, color: '#c9a84c' }}>{s.value}</div>
                 <div style={{ fontSize: '0.8rem', color: '#9999aa' }}>{s.label}</div>
@@ -46,22 +46,26 @@ export default function HeroSection() {
               {['#ff5f57','#ffbd2e','#28c840'].map(c => <div key={c} style={{ width: 10, height: 10, borderRadius: '50%', background: c }} />)}
               <span style={{ marginLeft: '0.5rem', color: '#9999aa', fontSize: '0.75rem' }}>Roomvera AI Studio</span>
             </div>
+            {/* BEFORE = left (original), AFTER = right (generated) */}
             <div
               style={{ position: 'relative', height: 260, borderRadius: 12, overflow: 'hidden', cursor: 'ew-resize', userSelect: 'none' }}
               onMouseMove={handleSlider}
               onMouseEnter={() => setHovered(true)}
               onMouseLeave={() => setHovered(false)}>
+              {/* BEFORE — full width background (original empty room) */}
               <img src="/demo/before.jpg" alt="Before" style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }} />
-              <div style={{ position: 'absolute', top: 0, left: 0, bottom: 0, width: `${sliderPos}%`, overflow: 'hidden', transition: hovered ? 'none' : 'width 0.3s ease' }}>
-                <img src="/demo/after.jpg" alt="After" style={{ position: 'absolute', top: 0, left: 0, width: `${10000/Math.max(sliderPos,1)}%`, height: '100%', objectFit: 'cover' }} />
+              {/* AFTER — slides in from left (redesigned room) */}
+              <div style={{ position: 'absolute', top: 0, left: 0, bottom: 0, width: `${sliderPos}%`, overflow: 'hidden', transition: hovered ? 'none' : 'width 0.8s ease' }}>
+                <img src="/demo/after.jpg" alt="After" style={{ position: 'absolute', top: 0, left: 0, height: '100%', width: `${10000 / Math.max(sliderPos, 1)}%`, objectFit: 'cover' }} />
               </div>
-              <div style={{ position: 'absolute', top: 0, bottom: 0, left: `${sliderPos}%`, width: 2, background: '#c9a84c', transform: 'translateX(-50%)', zIndex: 10, transition: hovered ? 'none' : 'left 0.3s ease' }}>
+              {/* Slider handle */}
+              <div style={{ position: 'absolute', top: 0, bottom: 0, left: `${sliderPos}%`, width: 2, background: '#c9a84c', transform: 'translateX(-50%)', zIndex: 10, transition: hovered ? 'none' : 'left 0.8s ease' }}>
                 <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: 28, height: 28, borderRadius: '50%', background: '#c9a84c', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#0a0a0f', fontWeight: 800, fontSize: '0.75rem', boxShadow: '0 0 15px rgba(201,168,76,0.6)' }}>↔</div>
               </div>
-              <div style={{ position: 'absolute', top: 8, left: 8, background: 'rgba(10,10,15,0.85)', borderRadius: '9999px', padding: '0.2rem 0.6rem', fontSize: '0.7rem', color: '#9999aa', zIndex: 5 }}>Before</div>
-              <div style={{ position: 'absolute', top: 8, right: 8, background: 'rgba(201,168,76,0.2)', border: '1px solid rgba(201,168,76,0.4)', borderRadius: '9999px', padding: '0.2rem 0.6rem', fontSize: '0.7rem', color: '#c9a84c', zIndex: 5 }}>After ✨</div>
+              <div style={{ position: 'absolute', top: 8, left: 8, background: 'rgba(10,10,15,0.85)', borderRadius: '9999px', padding: '0.2rem 0.6rem', fontSize: '0.7rem', color: '#9999aa', zIndex: 5 }}>After ✨</div>
+              <div style={{ position: 'absolute', top: 8, right: 8, background: 'rgba(10,10,15,0.7)', borderRadius: '9999px', padding: '0.2rem 0.6rem', fontSize: '0.7rem', color: '#9999aa', zIndex: 5 }}>Before</div>
             </div>
-            <div style={{ marginTop: '0.75rem', fontSize: '0.75rem', color: '#9999aa', textAlign: 'center' }}>← Drag to compare Before / After</div>
+            <div style={{ marginTop: '0.75rem', fontSize: '0.75rem', color: '#9999aa', textAlign: 'center' }}>← Drag to compare · After on left · Before on right</div>
             <Link href="/studio"><button className="btn-gold" style={{ width: '100%', marginTop: '0.75rem' }}>✦ Try it free</button></Link>
           </div>
         </div>

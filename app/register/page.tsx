@@ -33,7 +33,7 @@ export default function RegisterPage() {
           </Link>
         </div>
         <div style={{ background: 'rgba(201,168,76,0.1)', border: '1px solid rgba(201,168,76,0.3)', borderRadius: 12, padding: '0.75rem', marginBottom: '1.5rem', textAlign: 'center', color: '#c9a84c', fontSize: '0.85rem' }}>
-          ✦ Start with 100 tokens — 4 free redesigns
+          ✦ Start with 75 tokens — 4 free redesigns
         </div>
         <div className="glass-card" style={{ padding: '2.5rem', borderRadius: 20 }}>
           <h1 style={{ fontWeight: 800, fontSize: '1.75rem', color: '#f5f5f0', marginBottom: '2rem', textAlign: 'center' }}>Create account</h1>
