@@ -1,4 +1,5 @@
 'use client'
+import { Suspense } from 'react'
 import { useState, useRef, useCallback, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
@@ -35,7 +36,7 @@ const roomPrompts: Record<string, string> = {
   'Dining Room': 'dining room with table, chairs, pendant light over table',
 }
 
-export default function StudioPage() {
+function StudioPageInner() {
   const searchParams = useSearchParams()
   const [room, setRoom] = useState(searchParams?.get('room') || 'Living Room')
   const [style, setStyle] = useState(searchParams?.get('style') || 'Modern')
@@ -293,5 +294,14 @@ export default function StudioPage() {
         </div>
       </div>
     </div>
+  )
+}
+
+import { Suspense } from 'react'
+export default function StudioPage() {
+  return (
+    <Suspense fallback={<div style={{ minHeight: '100vh', background: '#0a0a0f', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#c9a84c' }}>Loading Studio...</div>}>
+      <StudioPageInner />
+    </Suspense>
   )
 }
