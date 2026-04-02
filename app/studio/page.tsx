@@ -1,6 +1,5 @@
 'use client'
-import { Suspense } from 'react'
-import { useState, useRef, useCallback, useEffect } from 'react'
+import { useState, useRef, useCallback, useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { Upload, Wand2, Sparkles, ArrowLeft, Sun, Sofa, X, Maximize2 } from 'lucide-react'
@@ -297,7 +296,6 @@ function StudioPageInner() {
   )
 }
 
-import { Suspense } from 'react'
 export default function StudioPage() {
   return (
     <Suspense fallback={<div style={{ minHeight: '100vh', background: '#0a0a0f', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#c9a84c' }}>Loading Studio...</div>}>
